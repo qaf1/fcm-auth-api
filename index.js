@@ -1,33 +1,37 @@
+require('dotenv').config();
 const express = require('express');
-const admin = require('firebase-admin');
+const { GoogleAuth } = require('google-auth-library');
+const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = 3000;
 
-// Initialize Firebase Admin SDK using the service account from environment variable
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+// Path to your service account JSON file
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+const serviceAccountPath = path.resolve(__dirname, process.env.SERVICE_ACCOUNT_PATH);
+console.log('Resolved path:', serviceAccountPath);
 
-// Sample route to test Firebase Admin SDK
-app.get('/', (req, res) => {
-  res.send('Hello, Firebase is initialized!');
-});
-
-// Example route to fetch Firebase access token
+// Endpoint to get the FCM access token
 app.get('/get-access-token', async (req, res) => {
   try {
-    const accessToken = await admin.credential.applicationDefault().getAccessToken();
-    res.json({ access_token: accessToken });
+    // Create a GoogleAuth instance
+    const auth = new GoogleAuth({
+      keyFile: serviceAccountPath,
+      scopes: ['https://www.googleapis.com/auth/firebase.messaging'],
+    });
+
+    // Get the access token
+    const client = await auth.getClient();
+    const token = await client.getAccessToken();
+
+    res.json({ accessToken: token });
   } catch (error) {
     console.error('Error fetching access token:', error);
-    res.status(500).send('Error fetching access token');
+    res.status(500).json({ error: 'Failed to fetch access token' });
   }
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

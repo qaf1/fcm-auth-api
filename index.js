@@ -7,8 +7,15 @@ const app = express();
 const PORT = 3000;
 
 // Path to your service account JSON file
-const serviceAccountPath = path.resolve(__dirname, process.env.SERVICE_ACCOUNT_PATH);
-console.log('Resolved path:', serviceAccountPath);
+const admin = require('firebase-admin');
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
+// const serviceAccountPath = path.resolve(__dirname, process.env.SERVICE_ACCOUNT_PATH);
+// console.log('Resolved path:', serviceAccountPath);
 
 // Endpoint to get the FCM access token
 app.get('/get-access-token', async (req, res) => {

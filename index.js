@@ -5,7 +5,7 @@ const { GoogleAuth } = require('google-auth-library');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Path to your service account JSON file
 const keyPath = path.join(__dirname, 'serviceAccountKey.json');

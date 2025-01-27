@@ -9,7 +9,7 @@ const PORT = 3000;
 
 // Path to your service account JSON file
 const keyPath = path.join(__dirname, 'serviceAccountKey.json');
-fs.writeFileSync(keyPath, process.env.FIREBASE_KEY);
+fs.writeFileSync(keyPath, process.env.SERVICE_ACCOUNT_JSON);
 // const serviceAccountPath = path.resolve(__dirname, process.env.SERVICE_ACCOUNT_PATH);
 // console.log('Resolved path:', serviceAccountPath);
 

@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const express = require('express');
 const { GoogleAuth } = require('google-auth-library');
 const path = require('path');
@@ -7,16 +8,17 @@ const app = express();
 const PORT = 3000;
 
 // Path to your service account JSON file
-
-const serviceAccountPath = path.resolve(__dirname, process.env.SERVICE_ACCOUNT_PATH);
-console.log('Resolved path:', serviceAccountPath);
+const keyPath = path.join(__dirname, 'serviceAccountKey.json');
+fs.writeFileSync(keyPath, process.env.FIREBASE_KEY);
+// const serviceAccountPath = path.resolve(__dirname, process.env.SERVICE_ACCOUNT_PATH);
+// console.log('Resolved path:', serviceAccountPath);
 
 // Endpoint to get the FCM access token
 app.get('/get-access-token', async (req, res) => {
   try {
     // Create a GoogleAuth instance
     const auth = new GoogleAuth({
-      keyFile: serviceAccountPath,
+      keyFile: keyPath,
       scopes: ['https://www.googleapis.com/auth/firebase.messaging'],
     });
 

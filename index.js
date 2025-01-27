@@ -13,6 +13,14 @@ fs.writeFileSync(keyPath, process.env.SERVICE_ACCOUNT_JSON);
 // const serviceAccountPath = path.resolve(__dirname, process.env.SERVICE_ACCOUNT_PATH);
 // console.log('Resolved path:', serviceAccountPath);
 
+app.use((req, res, next) => {
+    const apiKey = req.query.apiKey || req.headers['x-api-key'];
+    if (apiKey === process.env.API_KEY) {
+      next(); // Proceed to the route
+    } else {
+      res.status(403).json({ error: 'Forbidden: Invalid API key' });
+    }
+  });
 // Endpoint to get the FCM access token
 app.get('/get-access-token', async (req, res) => {
   try {

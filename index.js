@@ -18,7 +18,7 @@ app.use((req, res, next) => {
     if (apiKey === process.env.API_KEY) {
       next(); // Proceed to the route
     } else {
-      res.status(403).json({ error: 'Forbidden: Invalid API key' });
+      res.status(403).json({ error: 'Forbidden: Invalid API key ' });
     }
   });
 // Endpoint to get the FCM access token
